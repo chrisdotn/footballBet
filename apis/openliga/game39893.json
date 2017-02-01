@@ -1,0 +1,29 @@
+{
+  "MatchID": 39893,
+  "MatchDateTime": "2017-04-08T18:30:00",
+  "TimeZoneID": "W. Europe Standard Time",
+  "MatchDateTimeUTC": "2017-04-08T16:30:00Z",
+  "Group": {
+    "GroupName": "28. Spieltag",
+    "GroupOrderID": 28,
+    "GroupID": 23860
+  },
+  "Team1": {
+    "TeamId": 40,
+    "TeamName": "Bayern München",
+    "ShortName": "FC Bayern",
+    "TeamIconUrl": "http://www.openligadb.de/images/teamicons/Bayern_Muenchen.gif"
+  },
+  "Team2": {
+    "TeamId": 7,
+    "TeamName": "Borussia Dortmund",
+    "ShortName": "BVB",
+    "TeamIconUrl": "http://www.openligadb.de/images/teamicons/Borussia_Dortmund.gif"
+  },
+  "LastUpdateDateTime": "2016-12-15T19:35:37.507",
+  "MatchIsFinished": false,
+  "MatchResults": [],
+  "Goals": [],
+  "Location": null,
+  "NumberOfViewers": null
+}

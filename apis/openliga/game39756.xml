@@ -1,0 +1,113 @@
+<Match xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/OLDB.Spa.Models.Api">
+    <Goals>
+        <Goal>
+            <Comment i:nil="true" />
+            <GoalGetterID>1784</GoalGetterID>
+            <GoalGetterName>Raffael</GoalGetterName>
+            <GoalID>56062</GoalID>
+            <IsOvertime>false</IsOvertime>
+            <IsOwnGoal>false</IsOwnGoal>
+            <IsPenalty>false</IsPenalty>
+            <MatchMinute>6</MatchMinute>
+            <ScoreTeam1>0</ScoreTeam1>
+            <ScoreTeam2>1</ScoreTeam2>
+        </Goal>
+        <Goal>
+            <Comment i:nil="true" />
+            <GoalGetterID>16033</GoalGetterID>
+            <GoalGetterName>Pierre-Emerick Aubameyang</GoalGetterName>
+            <GoalID>56063</GoalID>
+            <IsOvertime>false</IsOvertime>
+            <IsOwnGoal>false</IsOwnGoal>
+            <IsPenalty>false</IsPenalty>
+            <MatchMinute>7</MatchMinute>
+            <ScoreTeam1>1</ScoreTeam1>
+            <ScoreTeam2>1</ScoreTeam2>
+        </Goal>
+        <Goal>
+            <Comment i:nil="true" />
+            <GoalGetterID>16101</GoalGetterID>
+            <GoalGetterName>Lukasz Piszczek</GoalGetterName>
+            <GoalID>56067</GoalID>
+            <IsOvertime>false</IsOvertime>
+            <IsOwnGoal>false</IsOwnGoal>
+            <IsPenalty>false</IsPenalty>
+            <MatchMinute>15</MatchMinute>
+            <ScoreTeam1>2</ScoreTeam1>
+            <ScoreTeam2>1</ScoreTeam2>
+        </Goal>
+        <Goal>
+            <Comment i:nil="true" />
+            <GoalGetterID>16100</GoalGetterID>
+            <GoalGetterName>Ousmane Dembelé</GoalGetterName>
+            <GoalID>56095</GoalID>
+            <IsOvertime>false</IsOvertime>
+            <IsOwnGoal>false</IsOwnGoal>
+            <IsPenalty>false</IsPenalty>
+            <MatchMinute>64</MatchMinute>
+            <ScoreTeam1>3</ScoreTeam1>
+            <ScoreTeam2>1</ScoreTeam2>
+        </Goal>
+        <Goal>
+            <Comment i:nil="true" />
+            <GoalGetterID>16033</GoalGetterID>
+            <GoalGetterName>Pierre-Emerick Aubameyang</GoalGetterName>
+            <GoalID>56097</GoalID>
+            <IsOvertime>false</IsOvertime>
+            <IsOwnGoal>false</IsOwnGoal>
+            <IsPenalty>false</IsPenalty>
+            <MatchMinute>68</MatchMinute>
+            <ScoreTeam1>4</ScoreTeam1>
+            <ScoreTeam2>1</ScoreTeam2>
+        </Goal>
+    </Goals>
+    <Group>
+        <GroupID>23845</GroupID>
+        <GroupName>13. Spieltag</GroupName>
+        <GroupOrderID>13</GroupOrderID>
+    </Group>
+    <LastUpdateDateTime>2016-12-04T00:12:04.097</LastUpdateDateTime>
+    <Location>
+        <LocationCity>Dortmund</LocationCity>
+        <LocationID>184</LocationID>
+        <LocationStadium>Signal-Iduna-Park</LocationStadium>
+    </Location>
+    <MatchDateTime>2016-12-03T15:30:00</MatchDateTime>
+    <MatchDateTimeUTC>2016-12-03T14:30:00Z</MatchDateTimeUTC>
+    <MatchID>39756</MatchID>
+    <MatchIsFinished>true</MatchIsFinished>
+    <MatchResults>
+        <MatchResult>
+            <PointsTeam1>2</PointsTeam1>
+            <PointsTeam2>1</PointsTeam2>
+            <ResultDescription>Ergebnis zur Halbzeit</ResultDescription>
+            <ResultID>70699</ResultID>
+            <ResultName>Halbzeitergebnis</ResultName>
+            <ResultOrderID>1</ResultOrderID>
+            <ResultTypeID>1</ResultTypeID>
+        </MatchResult>
+        <MatchResult>
+            <PointsTeam1>4</PointsTeam1>
+            <PointsTeam2>1</PointsTeam2>
+            <ResultDescription>Ergebnis nach Spielende</ResultDescription>
+            <ResultID>70700</ResultID>
+            <ResultName>Endergebnis</ResultName>
+            <ResultOrderID>2</ResultOrderID>
+            <ResultTypeID>2</ResultTypeID>
+        </MatchResult>
+    </MatchResults>
+    <NumberOfViewers>81360</NumberOfViewers>
+    <Team1>
+        <ShortName>BVB</ShortName>
+        <TeamIconUrl>http://www.openligadb.de/images/teamicons/Borussia_Dortmund.gif</TeamIconUrl>
+        <TeamId>7</TeamId>
+        <TeamName>Borussia Dortmund</TeamName>
+    </Team1>
+    <Team2>
+        <ShortName>Mönchengladbach</ShortName>
+        <TeamIconUrl>http://www.openligadb.de/images/teamicons/Bor_Moenchengladbach.gif</TeamIconUrl>
+        <TeamId>87</TeamId>
+        <TeamName>Borussia Mönchengladbach</TeamName>
+    </Team2>
+    <TimeZoneID>W. Europe Standard Time</TimeZoneID>
+    </Match>

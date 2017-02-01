@@ -1,0 +1,113 @@
+{
+  "MatchID": 39756,
+  "MatchDateTime": "2016-12-03T15:30:00",
+  "TimeZoneID": "W. Europe Standard Time",
+  "MatchDateTimeUTC": "2016-12-03T14:30:00Z",
+  "Group": {
+    "GroupName": "13. Spieltag",
+    "GroupOrderID": 13,
+    "GroupID": 23845
+  },
+  "Team1": {
+    "TeamId": 7,
+    "TeamName": "Borussia Dortmund",
+    "ShortName": "BVB",
+    "TeamIconUrl": "http://www.openligadb.de/images/teamicons/Borussia_Dortmund.gif"
+  },
+  "Team2": {
+    "TeamId": 87,
+    "TeamName": "Borussia Mönchengladbach",
+    "ShortName": "Mönchengladbach",
+    "TeamIconUrl": "http://www.openligadb.de/images/teamicons/Bor_Moenchengladbach.gif"
+  },
+  "LastUpdateDateTime": "2016-12-04T00:12:04.097",
+  "MatchIsFinished": true,
+  "MatchResults": [
+    {
+      "ResultID": 70699,
+      "ResultName": "Halbzeitergebnis",
+      "PointsTeam1": 2,
+      "PointsTeam2": 1,
+      "ResultOrderID": 1,
+      "ResultTypeID": 1,
+      "ResultDescription": "Ergebnis zur Halbzeit"
+    },
+    {
+      "ResultID": 70700,
+      "ResultName": "Endergebnis",
+      "PointsTeam1": 4,
+      "PointsTeam2": 1,
+      "ResultOrderID": 2,
+      "ResultTypeID": 2,
+      "ResultDescription": "Ergebnis nach Spielende"
+    }
+  ],
+  "Goals": [
+    {
+      "GoalID": 56062,
+      "ScoreTeam1": 0,
+      "ScoreTeam2": 1,
+      "MatchMinute": 6,
+      "GoalGetterID": 1784,
+      "GoalGetterName": "Raffael",
+      "IsPenalty": false,
+      "IsOwnGoal": false,
+      "IsOvertime": false,
+      "Comment": null
+    },
+    {
+      "GoalID": 56063,
+      "ScoreTeam1": 1,
+      "ScoreTeam2": 1,
+      "MatchMinute": 7,
+      "GoalGetterID": 16033,
+      "GoalGetterName": "Pierre-Emerick Aubameyang",
+      "IsPenalty": false,
+      "IsOwnGoal": false,
+      "IsOvertime": false,
+      "Comment": null
+    },
+    {
+      "GoalID": 56067,
+      "ScoreTeam1": 2,
+      "ScoreTeam2": 1,
+      "MatchMinute": 15,
+      "GoalGetterID": 16101,
+      "GoalGetterName": "Lukasz Piszczek",
+      "IsPenalty": false,
+      "IsOwnGoal": false,
+      "IsOvertime": false,
+      "Comment": null
+    },
+    {
+      "GoalID": 56095,
+      "ScoreTeam1": 3,
+      "ScoreTeam2": 1,
+      "MatchMinute": 64,
+      "GoalGetterID": 16100,
+      "GoalGetterName": "Ousmane Dembelé",
+      "IsPenalty": false,
+      "IsOwnGoal": false,
+      "IsOvertime": false,
+      "Comment": null
+    },
+    {
+      "GoalID": 56097,
+      "ScoreTeam1": 4,
+      "ScoreTeam2": 1,
+      "MatchMinute": 68,
+      "GoalGetterID": 16033,
+      "GoalGetterName": "Pierre-Emerick Aubameyang",
+      "IsPenalty": false,
+      "IsOwnGoal": false,
+      "IsOvertime": false,
+      "Comment": null
+    }
+  ],
+  "Location": {
+    "LocationID": 184,
+    "LocationCity": "Dortmund",
+    "LocationStadium": "Signal-Iduna-Park"
+  },
+  "NumberOfViewers": 81360
+}

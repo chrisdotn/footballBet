@@ -1,0 +1,283 @@
+{
+    "fixture": {
+        "id": 152250,
+        "competitionId": 430,
+        "date": "2016-08-27T13:30:00Z",
+        "status": "FINISHED",
+        "matchday": 1,
+        "homeTeamName": "FC Augsburg",
+        "homeTeamId": 16,
+        "awayTeamName": "VfL Wolfsburg",
+        "awayTeamId": 11,
+        "result": {
+            "goalsHomeTeam": 0,
+            "goalsAwayTeam": 2
+        },
+        "odds": {
+            "homeWin": 3,
+            "draw": 3.3,
+            "awayWin": 2.37
+        }
+    },
+    "head2head": {
+        "count": 10,
+        "timeFrameStart": "2012-09-14",
+        "timeFrameEnd": "2017-01-28",
+        "homeTeamWins": 3,
+        "awayTeamWins": 3,
+        "draws": 4,
+        "lastHomeWinHomeTeam": {
+            "id": 135896,
+            "competitionId": 351,
+            "date": "2015-03-07T14:30:00Z",
+            "status": "FINISHED",
+            "matchday": 24,
+            "homeTeamName": "FC Augsburg",
+            "homeTeamId": 16,
+            "awayTeamName": "VfL Wolfsburg",
+            "awayTeamId": 11,
+            "result": {
+                "goalsHomeTeam": 1,
+                "goalsAwayTeam": 0
+            },
+            "odds": null
+        },
+        "lastWinHomeTeam": {
+            "id": 152105,
+            "competitionId": 430,
+            "date": "2017-01-28T14:30:00Z",
+            "status": "FINISHED",
+            "matchday": 18,
+            "homeTeamName": "VfL Wolfsburg",
+            "homeTeamId": 11,
+            "awayTeamName": "FC Augsburg",
+            "awayTeamId": 16,
+            "result": {
+                "goalsHomeTeam": 1,
+                "goalsAwayTeam": 2,
+                "halfTime": {
+                    "goalsHomeTeam": 1,
+                    "goalsAwayTeam": 1
+                }
+            },
+            "odds": {
+                "homeWin": 2,
+                "draw": 3.4,
+                "awayWin": 3.8
+            }
+        },
+        "lastAwayWinAwayTeam": {
+            "id": 152250,
+            "competitionId": 430,
+            "date": "2016-08-27T13:30:00Z",
+            "status": "FINISHED",
+            "matchday": 1,
+            "homeTeamName": "FC Augsburg",
+            "homeTeamId": 16,
+            "awayTeamName": "VfL Wolfsburg",
+            "awayTeamId": 11,
+            "result": {
+                "goalsHomeTeam": 0,
+                "goalsAwayTeam": 2
+            },
+            "odds": {
+                "homeWin": 3,
+                "draw": 3.3,
+                "awayWin": 2.37
+            }
+        },
+        "lastWinAwayTeam": {
+            "id": 152250,
+            "competitionId": 430,
+            "date": "2016-08-27T13:30:00Z",
+            "status": "FINISHED",
+            "matchday": 1,
+            "homeTeamName": "FC Augsburg",
+            "homeTeamId": 16,
+            "awayTeamName": "VfL Wolfsburg",
+            "awayTeamId": 11,
+            "result": {
+                "goalsHomeTeam": 0,
+                "goalsAwayTeam": 2
+            },
+            "odds": {
+                "homeWin": 3,
+                "draw": 3.3,
+                "awayWin": 2.37
+            }
+        },
+        "fixtures": [{
+                "id": 152105,
+                "competitionId": 430,
+                "date": "2017-01-28T14:30:00Z",
+                "status": "FINISHED",
+                "matchday": 18,
+                "homeTeamName": "VfL Wolfsburg",
+                "homeTeamId": 11,
+                "awayTeamName": "FC Augsburg",
+                "awayTeamId": 16,
+                "result": {
+                    "goalsHomeTeam": 1,
+                    "goalsAwayTeam": 2,
+                    "halfTime": {
+                        "goalsHomeTeam": 1,
+                        "goalsAwayTeam": 1
+                    }
+                },
+                "odds": {
+                    "homeWin": 2,
+                    "draw": 3.4,
+                    "awayWin": 3.8
+                }
+            },
+            {
+                "id": 152250,
+                "competitionId": 430,
+                "date": "2016-08-27T13:30:00Z",
+                "status": "FINISHED",
+                "matchday": 1,
+                "homeTeamName": "FC Augsburg",
+                "homeTeamId": 16,
+                "awayTeamName": "VfL Wolfsburg",
+                "awayTeamId": 11,
+                "result": {
+                    "goalsHomeTeam": 0,
+                    "goalsAwayTeam": 2
+                },
+                "odds": {
+                    "homeWin": 3,
+                    "draw": 3.3,
+                    "awayWin": 2.37
+                }
+            },
+            {
+                "id": 145401,
+                "competitionId": 394,
+                "date": "2016-04-23T13:30:00Z",
+                "status": "FINISHED",
+                "matchday": 31,
+                "homeTeamName": "VfL Wolfsburg",
+                "homeTeamId": 11,
+                "awayTeamName": "FC Augsburg",
+                "awayTeamId": 16,
+                "result": {
+                    "goalsHomeTeam": 0,
+                    "goalsAwayTeam": 2
+                },
+                "odds": null
+            },
+            {
+                "id": 145546,
+                "competitionId": 394,
+                "date": "2015-11-29T16:30:00Z",
+                "status": "FINISHED",
+                "matchday": 14,
+                "homeTeamName": "FC Augsburg",
+                "homeTeamId": 16,
+                "awayTeamName": "VfL Wolfsburg",
+                "awayTeamId": 11,
+                "result": {
+                    "goalsHomeTeam": 0,
+                    "goalsAwayTeam": 0
+                },
+                "odds": null
+            },
+            {
+                "id": 135896,
+                "competitionId": 351,
+                "date": "2015-03-07T14:30:00Z",
+                "status": "FINISHED",
+                "matchday": 24,
+                "homeTeamName": "FC Augsburg",
+                "homeTeamId": 16,
+                "awayTeamName": "VfL Wolfsburg",
+                "awayTeamId": 11,
+                "result": {
+                    "goalsHomeTeam": 1,
+                    "goalsAwayTeam": 0
+                },
+                "odds": null
+            },
+            {
+                "id": 136057,
+                "competitionId": 351,
+                "date": "2014-10-05T13:30:00Z",
+                "status": "FINISHED",
+                "matchday": 7,
+                "homeTeamName": "VfL Wolfsburg",
+                "homeTeamId": 11,
+                "awayTeamName": "FC Augsburg",
+                "awayTeamId": 16,
+                "result": {
+                    "goalsHomeTeam": 1,
+                    "goalsAwayTeam": 0
+                },
+                "odds": null
+            },
+            {
+                "id": 131032,
+                "competitionId": 338,
+                "date": "2014-03-22T14:30:00Z",
+                "status": null,
+                "matchday": 26,
+                "homeTeamName": "VfL Wolfsburg",
+                "homeTeamId": 11,
+                "awayTeamName": "FC Augsburg",
+                "awayTeamId": 16,
+                "result": {
+                    "goalsHomeTeam": 1,
+                    "goalsAwayTeam": 1
+                },
+                "odds": null
+            },
+            {
+                "id": 131177,
+                "competitionId": 338,
+                "date": "2013-10-19T22:00:00Z",
+                "status": null,
+                "matchday": 9,
+                "homeTeamName": "FC Augsburg",
+                "homeTeamId": 16,
+                "awayTeamName": "VfL Wolfsburg",
+                "awayTeamId": 11,
+                "result": {
+                    "goalsHomeTeam": 1,
+                    "goalsAwayTeam": 2
+                },
+                "odds": null
+            },
+            {
+                "id": 128773,
+                "competitionId": 298,
+                "date": "2013-02-01T23:00:00Z",
+                "status": null,
+                "matchday": 20,
+                "homeTeamName": "VfL Wolfsburg",
+                "homeTeamId": 11,
+                "awayTeamName": "FC Augsburg",
+                "awayTeamId": 16,
+                "result": {
+                    "goalsHomeTeam": 1,
+                    "goalsAwayTeam": 1
+                },
+                "odds": null
+            },
+            {
+                "id": 19726,
+                "competitionId": 298,
+                "date": "2012-09-13T22:00:00Z",
+                "status": null,
+                "matchday": 3,
+                "homeTeamName": "FC Augsburg",
+                "homeTeamId": 16,
+                "awayTeamName": "VfL Wolfsburg",
+                "awayTeamId": 11,
+                "result": {
+                    "goalsHomeTeam": 0,
+                    "goalsAwayTeam": 0
+                },
+                "odds": null
+            }
+        ]
+    }
+}
