@@ -1,3 +1,5 @@
 module.exports = function(deployer) {
-  deployer.deploy(MetaCoin);
+    deployer.deploy(usingOraclize);
+    deployer.deploy(FootballBet);
+    deployer.autolink();
 };
