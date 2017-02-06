@@ -56,7 +56,7 @@ contract FootballBet is usingOraclize {
         OAR = OraclizeAddrResolverI(0x35e50f57a7273e8ec5f27652add107e082ee31cd);
     }
 
-    function generateUrl(string base, string id, string filter, string jsonPath) public returns (string) {
+    function generateUrl(string base, string id, string filter, string jsonPath) constant returns (string) {
         strings.slice[] memory parts = new strings.slice[](7);
         parts[0] = 'json('.toSlice();
         parts[1] = base.toSlice();
@@ -73,7 +73,6 @@ contract FootballBet is usingOraclize {
         } else {
             Info('Oraclize query was sent, standing by for the answer..');
             string memory url = generateUrl('http://api.football-data.org/v1/fixtures/', gameId, '?head2head=0', key);
-            Info(url);
             bytes32 requestId = oraclize_query('URL', url);
             requests[requestId] = Request(true, false, key);
         }
@@ -85,11 +84,11 @@ contract FootballBet is usingOraclize {
         queryFootballData(game.gameId, 'status');
         queryFootballData(game.gameId, 'homeTeamName');
         queryFootballData(game.gameId, 'awayTeamName');
-        queryFootballData(game.gameId, 'result.goalsHomeTeam');
-        queryFootballData(game.gameId, 'result.goalsAwayTeam');
+        //queryFootballData(game.gameId, 'result.goalsHomeTeam');
+        //queryFootballData(game.gameId, 'result.goalsAwayTeam');
     }
 
-    function gameToString() returns (string) {
+    function gameToString() constant returns (string) {
         string memory result = 'unknown';
         if (game.result == Result.HOMETEAMWIN) { result = 'homeTeamWin'; }
         else if (game.result == Result.AWAYTEAMWIN) { result = 'awayTeamWin'; }
@@ -107,7 +106,7 @@ contract FootballBet is usingOraclize {
         return ', '.toSlice().join(parts);
     }
 
-    function requestToString(bytes32 id) public returns (string) {
+    function requestToString(bytes32 id) constant returns (string) {
         Request memory r = requests[id];
         strings.slice[] memory parts = new strings.slice[](5);
         parts[0] = 'REQUEST'.toSlice();
@@ -117,7 +116,7 @@ contract FootballBet is usingOraclize {
         return ', '.toSlice().join(parts);
     }
 
-    function determineResult(uint homeTeam, uint awayTeam) internal returns (Result) {
+    function determineResult(uint homeTeam, uint awayTeam) constant returns (Result) {
         if (homeTeam > awayTeam) { return Result.HOMETEAMWIN; }
         if (homeTeam == awayTeam) { return Result.DRAW; }
         return Result.AWAYTEAMWIN;
@@ -154,20 +153,6 @@ contract FootballBet is usingOraclize {
             requests[myid].processed = true;
         }
     }
-        /*
-        TODO
-        switch between callback to static query or result query
-        STATIC
-        - Determine if static query from createBet
-        - Set values (in particular date)
-        - setup query for results 4 hours after starttime
-        RESULT
-        - set status to CLOSED
-        - determine winner
-        - determine sum of loosing bets
-        - distribute loosing bets to winning bets
-        - set status to WITHDRAWEL
-        */
 
     /*function placeBet(Result bet) public payable {
         numberBets++;
