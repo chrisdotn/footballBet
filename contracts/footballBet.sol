@@ -26,11 +26,6 @@ contract FootballBet is usingOraclize {
         uint receivedGoalMsgs;
     }
 
-    struct Team {
-        uint id;
-        string name;
-    }
-
     struct Bet {
         Result bet;
         uint stake;
@@ -38,17 +33,18 @@ contract FootballBet is usingOraclize {
         address sender;
     }
 
-    mapping (uint => Bet) bets;
-    uint numberBets;
-
     struct Request {
         bool initialized;
         bool processed;
         string key;
     }
 
-    mapping (bytes32 => Request) requests;
+    mapping (uint => Bet) bets;
+    uint numberBets;
+
     Game game;
+
+    mapping (bytes32 => Request) requests;
 
     event Info(string message);
 
@@ -80,12 +76,60 @@ contract FootballBet is usingOraclize {
 
     function createBet(string gameId) public payable {
         game = Game(gameId, '0', 'UNKNOWN', '', '', 0, 0, Result.UNKNOWN, 0);
-        queryFootballData(gameId, 'date');
+        queryFootballData(game.gameId, 'date');
         queryFootballData(game.gameId, 'status');
         queryFootballData(game.gameId, 'homeTeamName');
         queryFootballData(game.gameId, 'awayTeamName');
         //queryFootballData(game.gameId, 'result.goalsHomeTeam');
         //queryFootballData(game.gameId, 'result.goalsAwayTeam');
+    }
+
+    function evaluate() public {
+        queryFootballData(game.gameId, 'result.goalsHomeTeam');
+        queryFootballData(game.gameId, 'result.goalsAwayTeam');
+    }
+
+    function determineResult(uint homeTeam, uint awayTeam) constant returns (Result) {
+        if (homeTeam > awayTeam) { return Result.HOMETEAMWIN; }
+        if (homeTeam == awayTeam) { return Result.DRAW; }
+        return Result.AWAYTEAMWIN;
+    }
+
+    function __callback(bytes32 myid, string result) public {
+        Request memory r = requests[myid];
+
+        if (r.initialized && !r.processed) {
+            // new response
+            if (r.key.toSlice().equals('date'.toSlice())) {
+                game.date = result;
+            } else if (r.key.toSlice().equals('status'.toSlice())) {
+                game.status = result;
+            } else if (r.key.toSlice().equals('homeTeamName'.toSlice())) {
+                game.homeTeam = result;
+            } else if (r.key.toSlice().equals('awayTeamName'.toSlice())) {
+                game.awayTeam = result;
+            } else if (r.key.toSlice().equals('result.goalsHomeTeam'.toSlice())) {
+                game.homeTeamGoals = parseInt(result);
+                game.receivedGoalMsgs++;
+                if (game.receivedGoalMsgs == 2) {
+                    game.result = determineResult(game.homeTeamGoals, game.awayTeamGoals);
+                }
+            } else if (r.key.toSlice().equals('result.goalsAwayTeam'.toSlice())) {
+                game.awayTeamGoals = parseInt(result);
+                game.receivedGoalMsgs++;
+                if (game.receivedGoalMsgs == 2) {
+                    game.result = determineResult(game.homeTeamGoals, game.awayTeamGoals);
+                }
+            }
+
+            Info(gameToString());
+            requests[myid].processed = true;
+        }
+    }
+
+    function placeBet(Result bet) public payable {
+        numberBets++;
+        bets[numberBets] = Bet(bet, msg.value, 0, msg.sender);
     }
 
     function gameToString() constant returns (string) {
@@ -116,49 +160,7 @@ contract FootballBet is usingOraclize {
         return ', '.toSlice().join(parts);
     }
 
-    function determineResult(uint homeTeam, uint awayTeam) constant returns (Result) {
-        if (homeTeam > awayTeam) { return Result.HOMETEAMWIN; }
-        if (homeTeam == awayTeam) { return Result.DRAW; }
-        return Result.AWAYTEAMWIN;
-    }
-
-    function __callback(bytes32 myid, string result) public {
-        Request memory r = requests[myid];
-
-        if (r.initialized && !r.processed) {
-            // new response
-            if (r.key.toSlice().equals('date'.toSlice())) {
-                game.date = result;
-            } else if (r.key.toSlice().equals('status'.toSlice())) {
-                game.status = result;
-            } else if (r.key.toSlice().equals('homeTeamName'.toSlice())) {
-                game.homeTeam = result;
-            } else if (r.key.toSlice().equals('awayTeamName'.toSlice())) {
-                game.awayTeam = result;
-            } else if (r.key.toSlice().equals('result.goalsHomeTeam'.toSlice())) {
-                game.homeTeamGoals = parseInt(result);
-                game.receivedGoalMsgs++;
-                if (game.receivedGoalMsgs != 2) {
-                    game.result = determineResult(game.homeTeamGoals, game.awayTeamGoals);
-                }
-            } else if (r.key.toSlice().equals('result.goalsAwayTeam'.toSlice())) {
-                game.awayTeamGoals = parseInt(result);
-                game.receivedGoalMsgs++;
-                if (game.receivedGoalMsgs != 2) {
-                    game.result = determineResult(game.homeTeamGoals, game.awayTeamGoals);
-                }
-            }
-
-            Info(gameToString());
-            requests[myid].processed = true;
-        }
-    }
-
-    /*function placeBet(Result bet) public payable {
-        numberBets++;
-        bets[numberBets] = Bet(bet, msg.value, 0, msg.sender);
-    }
-
+    /*
     function splitElement(strings.slice s) internal returns (strings.slice value) {
 
         var delim = ':'.toSlice();
