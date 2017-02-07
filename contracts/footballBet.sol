@@ -27,7 +27,6 @@ contract FootballBet is usingOraclize {
     }
 
     struct Bet {
-        Result bet;
         uint stake;
         uint win;
         address sender;
@@ -39,14 +38,17 @@ contract FootballBet is usingOraclize {
         string key;
     }
 
-    mapping (uint => Bet) bets;
-    uint numberBets;
+    mapping(uint8 => Bet[]) bets;
+    mapping(uint8 => uint) betSums;
+
+    mapping(address => uint) pendingWithdrawals;
 
     Game game;
 
     mapping (bytes32 => Request) requests;
 
     event Info(string message);
+    event BetEvent(uint stake, uint win, address sender);
 
     function FootballBet() {
         OAR = OraclizeAddrResolverI(0x35e50f57a7273e8ec5f27652add107e082ee31cd);
@@ -74,7 +76,7 @@ contract FootballBet is usingOraclize {
         }
     }
 
-    function createBet(string gameId) public payable {
+    function createGame(string gameId) public payable {
         game = Game(gameId, '0', 'UNKNOWN', '', '', 0, 0, Result.UNKNOWN, 0);
         queryFootballData(game.gameId, 'date');
         queryFootballData(game.gameId, 'status');
@@ -85,6 +87,7 @@ contract FootballBet is usingOraclize {
     }
 
     function evaluate() public {
+        queryFootballData(game.gameId, 'status');
         queryFootballData(game.gameId, 'result.goalsHomeTeam');
         queryFootballData(game.gameId, 'result.goalsAwayTeam');
     }
@@ -127,9 +130,49 @@ contract FootballBet is usingOraclize {
         }
     }
 
-    function placeBet(Result bet) public payable {
-        numberBets++;
-        bets[numberBets] = Bet(bet, msg.value, 0, msg.sender);
+    function placeBet(uint8 _bet) public payable {
+        Bet memory b = Bet(msg.value, 0, msg.sender);
+        bets[_bet].push(b);
+        betSums[_bet] += msg.value;
+        BetEvent(b.stake, b.win, b.sender);
+    }
+
+    function setWinners() {
+        uint loosingStake = 0;
+
+        if (game.result != Result.HOMETEAMWIN) {
+            loosingStake += betSums[uint8(Result.HOMETEAMWIN)];
+        }
+
+        if (game.result != Result.AWAYTEAMWIN) {
+            loosingStake += betSums[uint8(Result.AWAYTEAMWIN)];
+        }
+
+        if (game.result != Result.DRAW) {
+            loosingStake += betSums[uint8(Result.DRAW)];
+        }
+
+        // determine the ein per wei
+        uint winPerWei = loosingStake / betSums[uint8(game.result)];
+
+        for (uint i=0; i<bets[uint8(game.result)].length; i++) {
+            Bet b = bets[uint8(game.result)][i];
+            b.win = winPerWei * b.stake;
+            BetEvent(b.stake, b.win, b.sender);
+            pendingWithdrawals[b.sender] = b.stake + b.win;
+        }
+    }
+
+    function withdraw() returns (bool) {
+        uint amount = pendingWithdrawals[msg.sender];
+        pendingWithdrawals[msg.sender] = 0;
+
+        if (msg.sender.send(amount)) {
+            return true;
+        } else {
+            pendingWithdrawals[msg.sender] = amount;
+            return false;
+        }
     }
 
     function gameToString() constant returns (string) {
