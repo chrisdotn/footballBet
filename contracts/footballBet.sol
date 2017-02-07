@@ -5,12 +5,6 @@ import './lib/strings.sol';
 
 contract FootballBet is usingOraclize {
     using strings for *;
-    /*string public league = 'bl1';
-    string public teamId = '7';
-    string public group = '28';
-    string public matchIdBvbFcb = '39893'; // FCB:BVB      ST28, 2017-04-08
-    string public matchIdFcKBvb = '39769'; // FCK:BVB 1:0, ST14, 2016-12-10
-    string public matchIdBvbMgb = '39756'; // BVB:MGB 4:1, ST13, 2016-12-03*/
 
     enum Result { HOMETEAMWIN, AWAYTEAMWIN, DRAW, PENDING, UNKNOWN }
 
