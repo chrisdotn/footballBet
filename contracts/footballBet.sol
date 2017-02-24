@@ -2,6 +2,7 @@ pragma solidity ^0.4.2;
 
 import './lib/usingOraclize.sol';
 import './lib/strings.sol';
+import './lib/JsmnSol.sol';
 
 contract FootballBet is usingOraclize {
     using strings for *;
@@ -45,7 +46,7 @@ contract FootballBet is usingOraclize {
     event BetEvent(uint stake, uint win, address sender);
 
     function FootballBet() {
-        OAR = OraclizeAddrResolverI(0x35e50f57a7273e8ec5f27652add107e082ee31cd);
+        OAR = OraclizeAddrResolverI(0xfE736E927c7233938c70672c5416B09bCCA348Cd);
     }
 
     function generateUrl(string base, string id, string filter, string jsonPath) constant returns (string) {
@@ -54,36 +55,35 @@ contract FootballBet is usingOraclize {
         parts[1] = base.toSlice();
         parts[2] = id.toSlice();
         parts[3] = filter.toSlice();
-        parts[4] = ').fixture.'.toSlice();
+        parts[4] = ')'.toSlice();
         parts[5] = jsonPath.toSlice();
         return ''.toSlice().join(parts);
     }
 
-    function queryFootballData(string gameId, string key) public {
+    function queryFootballData(string gameId, string key, uint gas) public {
         if (oraclize_getPrice('URL') > this.balance) {
             Info('Oraclize query was NOT sent, please add some ETH to cover for the query fee');
         } else {
             Info('Oraclize query was sent, standing by for the answer..');
             string memory url = generateUrl('http://api.football-data.org/v1/fixtures/', gameId, '?head2head=0', key);
-            bytes32 requestId = oraclize_query('URL', url);
+            bytes32 requestId = oraclize_query('URL', url, gas);
             requests[requestId] = Request(true, false, key);
         }
     }
 
     function createGame(string gameId) public payable {
         game = Game(gameId, '0', 'UNKNOWN', '', '', 0, 0, Result.UNKNOWN, 0);
-        queryFootballData(game.gameId, 'date');
+        queryFootballData(game.gameId, '.fixture', 2200000);
+        /*queryFootballData(game.gameId, 'date');
         queryFootballData(game.gameId, 'status');
         queryFootballData(game.gameId, 'homeTeamName');
-        queryFootballData(game.gameId, 'awayTeamName');
+        queryFootballData(game.gameId, 'awayTeamName');*/
         //queryFootballData(game.gameId, 'result.goalsHomeTeam');
         //queryFootballData(game.gameId, 'result.goalsAwayTeam');
     }
 
     function evaluate() public {
-        queryFootballData(game.gameId, 'status');
-        queryFootballData(game.gameId, 'result.goalsHomeTeam');
-        queryFootballData(game.gameId, 'result.goalsAwayTeam');
+        queryFootballData(game.gameId, '.fixture.result', 400000);
     }
 
     function determineResult(uint homeTeam, uint awayTeam) constant returns (Result) {
@@ -97,24 +97,35 @@ contract FootballBet is usingOraclize {
 
         if (r.initialized && !r.processed) {
             // new response
-            if (r.key.toSlice().equals('date'.toSlice())) {
-                game.date = result;
-            } else if (r.key.toSlice().equals('status'.toSlice())) {
-                game.status = result;
-            } else if (r.key.toSlice().equals('homeTeamName'.toSlice())) {
-                game.homeTeam = result;
-            } else if (r.key.toSlice().equals('awayTeamName'.toSlice())) {
-                game.awayTeam = result;
-            } else if (r.key.toSlice().equals('result.goalsHomeTeam'.toSlice())) {
-                game.homeTeamGoals = parseInt(result);
-                game.receivedGoalMsgs++;
-                if (game.receivedGoalMsgs == 2) {
-                    game.result = determineResult(game.homeTeamGoals, game.awayTeamGoals);
+            if (r.key.toSlice().equals('.fixture'.toSlice())) {
+                var (success, tokens, numberTokens) = JsmnSol.parse(result, 45);
+                if (success) {
+                    for (uint k=0; k<=numberTokens; k++) {
+                        // get Token contents
+                        string memory key = JsmnSol.getBytes(result, tokens[k]);
+                        if (key.toSlice().equals('status'.toSlice())) {
+                            game.status = JsmnSol.getBytes(result, tokens[++k]);
+                        } else if (key.toSlice().equals('homeTeamName'.toSlice())) {
+                            game.homeTeam = JsmnSol.getBytes(result, tokens[++k]);
+                        } else if (key.toSlice().equals('awayTeamName'.toSlice())) {
+                            game.awayTeam = JsmnSol.getBytes(result, tokens[++k]);
+                        }
+                    }
                 }
-            } else if (r.key.toSlice().equals('result.goalsAwayTeam'.toSlice())) {
-                game.awayTeamGoals = parseInt(result);
-                game.receivedGoalMsgs++;
-                if (game.receivedGoalMsgs == 2) {
+            } else if (r.key.toSlice().equals('.fixture.result'.toSlice())) {
+                Info('Got here');
+                (success, tokens, numberTokens) = JsmnSol.parse(result, 10);
+                if (success) {
+                    for (k=0; k<=numberTokens; k++) {
+                        key = JsmnSol.getBytes(result, tokens[k]);
+                        if (key.toSlice().equals('goalsAwayTeam'.toSlice())) {
+                            game.awayTeamGoals = parseInt(JsmnSol.getBytes(result, tokens[++k]));
+                            Info(JsmnSol.getBytes(result, tokens[k]));
+                        } else if (key.toSlice().equals('goalsHomeTeam'.toSlice())) {
+                            game.homeTeamGoals = parseInt(JsmnSol.getBytes(result, tokens[++k]));
+                            Info(JsmnSol.getBytes(result, tokens[k]));
+                        }
+                    }
                     game.result = determineResult(game.homeTeamGoals, game.awayTeamGoals);
                 }
             }
