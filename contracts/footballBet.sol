@@ -7,6 +7,14 @@ import './lib/JsmnSol.sol';
 contract FootballBet is usingOraclize {
     using strings for *;
 
+    string constant JSON_FIXTURE = '.fixture';
+    string constant JSON_RESULT = '.fixture.result';
+    string constant JSON_STATUS = 'status';
+    string constant JSON_HOME_TEAM = 'homeTeamName';
+    string constant JSON_AWAY_TEAM = 'awayTeamName';
+    string constant JSON_HOME_GOALS = 'goalsHomeTeam';
+    string constant JSON_AWAY_GOALS = 'goalsAwayTeam';
+
     enum Result { HOMETEAMWIN, AWAYTEAMWIN, DRAW, PENDING, UNKNOWN }
 
     struct Game {
@@ -73,17 +81,11 @@ contract FootballBet is usingOraclize {
 
     function createGame(string gameId) public payable {
         game = Game(gameId, '0', 'UNKNOWN', '', '', 0, 0, Result.UNKNOWN, 0);
-        queryFootballData(game.gameId, '.fixture', 2200000);
-        /*queryFootballData(game.gameId, 'date');
-        queryFootballData(game.gameId, 'status');
-        queryFootballData(game.gameId, 'homeTeamName');
-        queryFootballData(game.gameId, 'awayTeamName');*/
-        //queryFootballData(game.gameId, 'result.goalsHomeTeam');
-        //queryFootballData(game.gameId, 'result.goalsAwayTeam');
+        queryFootballData(game.gameId, JSON_FIXTURE, 2200000);
     }
 
     function evaluate() public {
-        queryFootballData(game.gameId, '.fixture.result', 400000);
+        queryFootballData(game.gameId, JSON_RESULT, 400000);
     }
 
     function determineResult(uint homeTeam, uint awayTeam) constant returns (Result) {
@@ -97,33 +99,30 @@ contract FootballBet is usingOraclize {
 
         if (r.initialized && !r.processed) {
             // new response
-            if (r.key.toSlice().equals('.fixture'.toSlice())) {
+            if (r.key.toSlice().equals(JSON_FIXTURE.toSlice())) {
                 var (success, tokens, numberTokens) = JsmnSol.parse(result, 45);
                 if (success) {
                     for (uint k=0; k<=numberTokens; k++) {
                         // get Token contents
                         string memory key = JsmnSol.getBytes(result, tokens[k]);
-                        if (key.toSlice().equals('status'.toSlice())) {
+                        if (key.toSlice().equals(JSON_STATUS.toSlice())) {
                             game.status = JsmnSol.getBytes(result, tokens[++k]);
-                        } else if (key.toSlice().equals('homeTeamName'.toSlice())) {
+                        } else if (key.toSlice().equals(JSON_HOME_TEAM.toSlice())) {
                             game.homeTeam = JsmnSol.getBytes(result, tokens[++k]);
-                        } else if (key.toSlice().equals('awayTeamName'.toSlice())) {
+                        } else if (key.toSlice().equals(JSON_AWAY_TEAM.toSlice())) {
                             game.awayTeam = JsmnSol.getBytes(result, tokens[++k]);
                         }
                     }
                 }
-            } else if (r.key.toSlice().equals('.fixture.result'.toSlice())) {
-                Info('Got here');
+            } else if (r.key.toSlice().equals(JSON_RESULT.toSlice())) {
                 (success, tokens, numberTokens) = JsmnSol.parse(result, 10);
                 if (success) {
                     for (k=0; k<=numberTokens; k++) {
                         key = JsmnSol.getBytes(result, tokens[k]);
-                        if (key.toSlice().equals('goalsAwayTeam'.toSlice())) {
+                        if (key.toSlice().equals(JSON_AWAY_GOALS.toSlice())) {
                             game.awayTeamGoals = parseInt(JsmnSol.getBytes(result, tokens[++k]));
-                            Info(JsmnSol.getBytes(result, tokens[k]));
-                        } else if (key.toSlice().equals('goalsHomeTeam'.toSlice())) {
+                        } else if (key.toSlice().equals(JSON_HOME_GOALS.toSlice())) {
                             game.homeTeamGoals = parseInt(JsmnSol.getBytes(result, tokens[++k]));
-                            Info(JsmnSol.getBytes(result, tokens[k]));
                         }
                     }
                     game.result = determineResult(game.homeTeamGoals, game.awayTeamGoals);
@@ -157,7 +156,7 @@ contract FootballBet is usingOraclize {
             loosingStake += betSums[uint8(Result.DRAW)];
         }
 
-        // determine the ein per wei
+        // determine the win per wei
         uint winPerWei = loosingStake / betSums[uint8(game.result)];
 
         for (uint i=0; i<bets[uint8(game.result)].length; i++) {
@@ -197,70 +196,5 @@ contract FootballBet is usingOraclize {
         parts[7] = result.toSlice();
         return ', '.toSlice().join(parts);
     }
-
-    function requestToString(bytes32 id) constant returns (string) {
-        Request memory r = requests[id];
-        strings.slice[] memory parts = new strings.slice[](5);
-        parts[0] = 'REQUEST'.toSlice();
-        parts[1] = r.key.toSlice();
-        parts[2] = r.initialized ? 'true'.toSlice() : 'false'.toSlice();
-        parts[3] = r.processed ? 'true'.toSlice() : 'false'.toSlice();
-        return ', '.toSlice().join(parts);
-    }
-
-    /*
-    function splitElement(strings.slice s) internal returns (strings.slice value) {
-
-        var delim = ':'.toSlice();
-        s.split(delim, value);
-        return value;
-    }
-
-    function processResult(string result) public {
-        var s = result.toSlice();
-        var delim = ','.toSlice();
-        strings.slice memory part;
-        mapping (string => strings.slice) elements;
-
-        Info(result);
-        uint numParts = s.count(delim);
-
-        //var parts = new string[](s.count(delim));
-        for (uint i = 0; i < numParts; i++) {
-            s.split(delim, part);
-            Info(part.toString());
-            if (part.startsWith('"status"'.toSlice())) {
-                elements['status'] = part;
-            } else if (part.startsWith('"homeTeamName"'.toSlice())) {
-                elements['homeTeamName'] = splitElement(part);
-            } else if (part.startsWith('"awayTeamName"'.toSlice())) {
-                elements['awayTeamName'] = splitElement(part);
-            } else if (part.startsWith('"goalsAwayTeam"'.toSlice())) {
-                elements['goalsAwayTeam'] = splitElement(part);
-            } else if (part.startsWith('"result"'.toSlice())) {
-                elements['goalsHomeTeam'] = splitElement(splitElement(part));
-            }
-        }
-        Info(elements['status'].toString());
-        Info(elements['homeTeamName'].toString());
-        Info(elements['awayTeamName'].toString());
-    }
-
-    function process2(string result) public {
-        strings.slice memory key;
-        strings.slice memory value;
-        (key, value) = split(result.toSlice());
-        Info('K: '.toSlice().concat(key));
-        Info('V: '.toSlice().concat(value));
-    }
-
-    function split(strings.slice s) internal returns (strings.slice key, strings.slice value) {
-        s.beyond('{'.toSlice()).until('}'.toSlice());
-
-        //strings.slice first = s.split
-        key = s.split(':'.toSlice());
-        value = s.beyond('{'.toSlice()).until('}'.toSlice());
-    }*/
-
 
 }
