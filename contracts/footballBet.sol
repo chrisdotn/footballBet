@@ -72,10 +72,11 @@ contract FootballBet is usingOraclize {
         if (oraclize_getPrice('URL') > this.balance) {
             Info('Oraclize query was NOT sent, please add some ETH to cover for the query fee');
         } else {
-            Info('Oraclize query was sent, standing by for the answer..');
-            string memory url = generateUrl('http://api.football-data.org/v1/fixtures/', gameId, '?head2head=0', key);
+            string memory url = generateUrl('https://api.football-data.org/v1/fixtures/', gameId, '?head2head=0', key);
+            oraclize_setProof(proofType_TLSNotary | proofStorage_IPFS);
             bytes32 requestId = oraclize_query('URL', url, gas);
             requests[requestId] = Request(true, false, key);
+            Info('Oraclize query was sent, standing by for the answer..');
         }
     }
 
@@ -94,6 +95,10 @@ contract FootballBet is usingOraclize {
         return Result.AWAYTEAMWIN;
     }
 
+    function __callback(bytes32 myid, string result, bytes proof) public {
+        __callback(myid, result);
+    }
+
     function __callback(bytes32 myid, string result) public {
         Request memory r = requests[myid];
 
@@ -104,13 +109,15 @@ contract FootballBet is usingOraclize {
                 if (success) {
                     for (uint k=0; k<=numberTokens; k++) {
                         // get Token contents
-                        string memory key = JsmnSol.getBytes(result, tokens[k]);
-                        if (key.toSlice().equals(JSON_STATUS.toSlice())) {
-                            game.status = JsmnSol.getBytes(result, tokens[++k]);
-                        } else if (key.toSlice().equals(JSON_HOME_TEAM.toSlice())) {
-                            game.homeTeam = JsmnSol.getBytes(result, tokens[++k]);
-                        } else if (key.toSlice().equals(JSON_AWAY_TEAM.toSlice())) {
-                            game.awayTeam = JsmnSol.getBytes(result, tokens[++k]);
+                        if (tokens[k].jsmnType == JsmnSol.JsmnType.STRING) {
+                            string memory key = JsmnSol.getBytes(result, tokens[k]);
+                            if (key.toSlice().equals(JSON_STATUS.toSlice())) {
+                                game.status = JsmnSol.getBytes(result, tokens[++k]);
+                            } else if (key.toSlice().equals(JSON_HOME_TEAM.toSlice())) {
+                                game.homeTeam = JsmnSol.getBytes(result, tokens[++k]);
+                            } else if (key.toSlice().equals(JSON_AWAY_TEAM.toSlice())) {
+                                game.awayTeam = JsmnSol.getBytes(result, tokens[++k]);
+                            }
                         }
                     }
                 }
@@ -118,11 +125,13 @@ contract FootballBet is usingOraclize {
                 (success, tokens, numberTokens) = JsmnSol.parse(result, 10);
                 if (success) {
                     for (k=0; k<=numberTokens; k++) {
-                        key = JsmnSol.getBytes(result, tokens[k]);
-                        if (key.toSlice().equals(JSON_AWAY_GOALS.toSlice())) {
-                            game.awayTeamGoals = parseInt(JsmnSol.getBytes(result, tokens[++k]));
-                        } else if (key.toSlice().equals(JSON_HOME_GOALS.toSlice())) {
-                            game.homeTeamGoals = parseInt(JsmnSol.getBytes(result, tokens[++k]));
+                        if (tokens[k].jsmnType == JsmnSol.JsmnType.STRING) {
+                            key = JsmnSol.getBytes(result, tokens[k]);
+                            if (key.toSlice().equals(JSON_AWAY_GOALS.toSlice())) {
+                                game.awayTeamGoals = parseInt(JsmnSol.getBytes(result, tokens[++k]));
+                            } else if (key.toSlice().equals(JSON_HOME_GOALS.toSlice())) {
+                                game.homeTeamGoals = parseInt(JsmnSol.getBytes(result, tokens[++k]));
+                            }
                         }
                     }
                     game.result = determineResult(game.homeTeamGoals, game.awayTeamGoals);
@@ -195,6 +204,23 @@ contract FootballBet is usingOraclize {
         parts[6] = uint2str(game.awayTeamGoals).toSlice();
         parts[7] = result.toSlice();
         return ', '.toSlice().join(parts);
+    }
+
+    function bytes32ToString(bytes32 x) constant returns (string) {
+        bytes memory bytesString = new bytes(32);
+        uint charCount = 0;
+        for (uint j = 0; j < 32; j++) {
+            byte char = byte(bytes32(uint(x) * 2 ** (8 * j)));
+            if (char != 0) {
+                bytesString[charCount] = char;
+                charCount++;
+            }
+        }
+        bytes memory bytesStringTrimmed = new bytes(charCount);
+        for (j = 0; j < charCount; j++) {
+            bytesStringTrimmed[j] = bytesString[j];
+        }
+        return string(bytesStringTrimmed);
     }
 
 }
